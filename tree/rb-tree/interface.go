@@ -1,10 +1,11 @@
 package rb_tree
 
-type RBValue interface {
-	LessThan(v RBValue) bool
-	Equal(v RBValue) bool
-	MoreThan(v RBValue) bool
-	DeepCopy(v RBValue)
+type RBItem interface {
+	LessThan(v RBItem) bool
+	Equal(v RBItem) bool
+	MoreThan(v RBItem) bool
+	DeepCopy(v RBItem)
 	Marshal() ([]byte, error)
 	UnMarshal(str string) error
+	String() string
 }

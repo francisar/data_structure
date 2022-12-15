@@ -3,11 +3,11 @@ package rb_tree
 type color bool
 
 const (
-	red color = true
+	red   color = true
 	black color = false
 )
 
-func (c  color) String() string {
+func (c color) String() string {
 	switch c {
 	case red:
 		return "R"
@@ -19,9 +19,6 @@ func (c  color) String() string {
 	return "unknown"
 }
 
-func (c color)ConvertColor() color {
+func (c color) ConvertColor() color {
 	return !c
 }
-
-
-

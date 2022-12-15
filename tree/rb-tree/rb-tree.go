@@ -5,42 +5,44 @@ import (
 )
 
 type RBTree struct {
-	Root     *RBNode
-	NodeNum  int64
+	Root    *RBNode
+	NodeNum int64
 }
 
-
-
-func (t *RBTree)Find(value RBValue) (targetNode *RBNode) {
-	targetNode,_ = t.Root.find(value)
+func (t *RBTree) Find(item RBItem) (targetNode *RBNode) {
+	targetNode, _ = t.Root.find(item)
 	return targetNode
 }
 
-func (t *RBTree)newNode(value RBValue) *RBNode {
+func (t *RBTree) newNode(item RBItem) *RBNode {
 	node := RBNode{
-		Parent: nil,
-		LeftChild: nil,
+		Parent:     nil,
+		LeftChild:  nil,
 		RightChild: nil,
-		nodeColor: red,
-		Tree: t,
-		Value: value,
+		nodeColor:  red,
+		Tree:       t,
+		Item:       item,
 	}
 	return &node
 }
 
-func (t *RBTree)Insert(value RBValue) error {
-	node := t.newNode(value)
+// Insert insert a Item into RBTree
+func (t *RBTree) Insert(item RBItem) error {
+	node := t.newNode(item)
+	// empty tree, just insert new node to Root
 	if t.Root == nil {
 		node.convertColor()
 		t.Root = node
 		t.NodeNum = 1
 		return nil
 	}
-	targetNode, parentNode := t.Root.find(value)
+	targetNode, parentNode := t.Root.find(item)
 	if targetNode != nil {
-		targetNode.Value.DeepCopy(value)
+		// item already exists, just update it
+		targetNode.Item.DeepCopy(item)
 		return nil
 	}
+	// item is not existed in the tree, insert new item to the position  where it should be in the tree
 	err := parentNode.insertChild(node)
 	if err != nil {
 		return err
@@ -49,33 +51,34 @@ func (t *RBTree)Insert(value RBValue) error {
 	return nil
 }
 
-func (t *RBTree)Delete(value RBValue) error {
-	valueStr, valueErr := value.Marshal()
-	if valueErr != nil {
-		err := NewRBTreeError(t.Root)
-		msg := fmt.Sprintf("delete value failed, invalid RBValue, Marshal failed:%s", valueErr.Error())
-		return err.WithMsg(msg)
-	}
+// Delete remove the item from RBTree
+func (t *RBTree) Delete(item RBItem) error {
+	itemStr := item.String()
 	if t.Root == nil {
-		msg := fmt.Sprintf("delete value:%s in empty tree", string(valueStr))
+		msg := fmt.Sprintf("delete value:%s in empty tree", itemStr)
 		return NewEmptyTreeError(msg)
 	}
-	targetNode, _ := t.Root.find(value)
+	targetNode, _ := t.Root.find(item)
 	if targetNode == nil {
-		msg := fmt.Sprintf("delete value:%s can not find in tree", string(valueStr))
+		msg := fmt.Sprintf("delete value:%s can not find in tree", itemStr)
 		err := NewRBTreeError(t.Root)
 		return err.WithMsg(msg)
 	}
 	var parentNode *RBNode
+	// if item is a leaf node, just remove it
+	// if item is not a leaf node, find the max node of the left child tree or min node of the right tree to delete,
+	// copy value of  the real deleting node to the aim deleting node
 	if targetNode.LeftChild == nil && targetNode.RightChild == nil {
 		return targetNode.removeSelf()
 	} else if targetNode.LeftChild != nil {
-
-		_, parentNode = targetNode.LeftChild.find(value)
+		// the item is not a leaf node, find the max node in the left child tree while it's not nil
+		_, parentNode = targetNode.LeftChild.find(item)
 	} else {
-		_, parentNode = targetNode.RightChild.find(value)
+		// the item is not a leaf node, find the min node in the right child tree while it's not nil
+		_, parentNode = targetNode.RightChild.find(item)
 	}
-	targetNode.Value.DeepCopy(parentNode.Value)
+
+	targetNode.Item.DeepCopy(parentNode.Item)
 	err := parentNode.removeSelf()
 	if err != nil {
 		return err
@@ -83,7 +86,7 @@ func (t *RBTree)Delete(value RBValue) error {
 	return nil
 }
 
-func (t *RBTree)convertArray() [][]string {
+func (t *RBTree) convertArray() [][]string {
 	if t.Root == nil {
 		return nil
 	}
@@ -94,7 +97,7 @@ func (t *RBTree)convertArray() [][]string {
 		totalWidth = 1
 
 	} else {
-		totalWidth = (2<<(treeHeight-2))*3
+		totalWidth = (2 << (treeHeight - 2)) * 3
 	}
 	var array = make([][]string, totalHeight)
 	for i := range array {
@@ -103,12 +106,11 @@ func (t *RBTree)convertArray() [][]string {
 			array[i][j] = "   "
 		}
 	}
-	t.Root.convertArray(0, totalWidth / 2, treeHeight,totalWidth / 4, array)
+	t.Root.convertArray(0, totalWidth/2, treeHeight, totalWidth/4, array)
 	return array
 }
 
-
-func (t *RBTree)PrintTree() {
+func (t *RBTree) PrintTree() {
 	// 创建数组
 	printArray := t.convertArray()
 	// 打印
@@ -127,7 +129,7 @@ func (t *RBTree)PrintTree() {
 
 func NewRBTree() *RBTree {
 	tree := RBTree{
-		Root: nil,
+		Root:    nil,
 		NodeNum: 0,
 	}
 	return &tree

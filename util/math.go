@@ -1,6 +1,6 @@
 package util
 
-func MaxInt(x int, y int) int  {
+func MaxInt(x int, y int) int {
 	if x > y {
 		return x
 	}
@@ -8,7 +8,7 @@ func MaxInt(x int, y int) int  {
 }
 
 func IsEven(num int) bool {
-	if num % 2 == 0 {
+	if num%2 == 0 {
 		return true
 	}
 	return false

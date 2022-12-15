@@ -4,11 +4,11 @@ import "fmt"
 
 type rbTreeError struct {
 	node *RBNode
-	msg string
+	msg  string
 }
 
-func (r *rbTreeError)Error() string {
-	return fmt.Sprintf("%v %s", r.node, r.msg)
+func (r *rbTreeError) Error() string {
+	return fmt.Sprintf("%s %s", r.node.Item.String(), r.msg)
 }
 
 func NewRBTreeError(node *RBNode) *rbTreeError {
@@ -26,7 +26,7 @@ type emptyTreeError struct {
 	msg string
 }
 
-func (r *emptyTreeError)Error() string {
+func (r *emptyTreeError) Error() string {
 	return fmt.Sprintf("empty tree err:%s", r.msg)
 }
 
