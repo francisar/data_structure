@@ -1,4 +1,4 @@
-package odered_list
+package ordered_list
 
 import "github.com/francisar/data_structure"
 

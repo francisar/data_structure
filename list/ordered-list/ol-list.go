@@ -1,4 +1,4 @@
-package odered_list
+package ordered_list
 
 import "github.com/francisar/data_structure"
 
@@ -58,7 +58,8 @@ func (l *OrderedList)Find(item data_structure.OPItem) *OrderedListNode {
 
 func (l *OrderedList)Delete(item data_structure.OPItem) error {
 	if l.Header == nil {
-		return nil
+		err := NewEmptyOrderedListError("try to delete item in empty ordered list")
+		return err
 	}
 	node := l.newNode(item)
 	pre,current,next := l.Header.find(node)
@@ -72,5 +73,9 @@ func (l *OrderedList)Delete(item data_structure.OPItem) error {
 		if l.Header == current {
 			l.Header = next
 		}
+	} else {
+		err := NewOrderedListError(node)
+		return err.WithMsg("try to delete item that is not in ordered list")
 	}
+	return nil
 }

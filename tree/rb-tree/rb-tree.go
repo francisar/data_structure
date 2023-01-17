@@ -2,19 +2,24 @@ package rb_tree
 
 import (
 	"fmt"
+	"github.com/francisar/data_structure"
+	"sync"
 )
 
 type RBTree struct {
 	Root    *RBNode
+	mutex      sync.RWMutex
 	NodeNum int64
 }
 
-func (t *RBTree) Find(item RBItem) (targetNode *RBNode) {
+func (t *RBTree) Find(item  data_structure.OPItem) (targetNode *RBNode) {
+	t.mutex.RLock()
+	defer t.mutex.RUnlock()
 	targetNode, _ = t.Root.find(item)
 	return targetNode
 }
 
-func (t *RBTree) newNode(item RBItem) *RBNode {
+func (t *RBTree) newNode(item data_structure.OPItem) *RBNode {
 	node := RBNode{
 		Parent:     nil,
 		LeftChild:  nil,
@@ -27,7 +32,9 @@ func (t *RBTree) newNode(item RBItem) *RBNode {
 }
 
 // Insert insert a Item into RBTree
-func (t *RBTree) Insert(item RBItem) error {
+func (t *RBTree) Insert(item data_structure.OPItem) error {
+	t.mutex.Lock()
+	defer t.mutex.Unlock()
 	node := t.newNode(item)
 	// empty tree, just insert new node to Root
 	if t.Root == nil {
@@ -52,7 +59,9 @@ func (t *RBTree) Insert(item RBItem) error {
 }
 
 // Delete remove the item from RBTree
-func (t *RBTree) Delete(item RBItem) error {
+func (t *RBTree) Delete(item data_structure.OPItem) error {
+	t.mutex.Lock()
+	defer t.mutex.Unlock()
 	itemStr := item.String()
 	if t.Root == nil {
 		msg := fmt.Sprintf("delete value:%s in empty tree", itemStr)

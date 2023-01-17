@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/francisar/data_structure"
 	rb_tree "github.com/francisar/data_structure/tree/rb-tree"
 	"math/rand"
 	"strconv"
@@ -12,25 +13,25 @@ type Int struct {
 	value int
 }
 
-func NewInt(value int) rb_tree.RBItem {
+func NewInt(value int) data_structure.OPItem {
 	i := Int{
 		value: value,
 	}
 	return &i
 }
-func (i *Int) LessThan(v rb_tree.RBItem) bool {
+func (i *Int) LessThan(v data_structure.OPItem) bool {
 	return i.value < (v.(*Int)).value
 }
 
-func (i *Int) Equal(v rb_tree.RBItem) bool {
+func (i *Int) Equal(v data_structure.OPItem) bool {
 	return i.value == v.(*Int).value
 }
 
-func (i *Int) MoreThan(v rb_tree.RBItem) bool {
+func (i *Int) MoreThan(v data_structure.OPItem) bool {
 	return i.value > (v.(*Int)).value
 }
 
-func (i *Int) DeepCopy(v rb_tree.RBItem) {
+func (i *Int) DeepCopy(v data_structure.OPItem) {
 	i.value = (v.(*Int)).value
 }
 

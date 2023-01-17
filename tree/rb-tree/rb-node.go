@@ -2,6 +2,7 @@ package rb_tree
 
 import (
 	"fmt"
+	"github.com/francisar/data_structure"
 	"github.com/francisar/data_structure/util"
 )
 
@@ -10,7 +11,7 @@ type RBNode struct {
 	LeftChild  *RBNode
 	RightChild *RBNode
 	Parent     *RBNode
-	Item       RBItem
+	Item       data_structure.OPItem
 	Tree       *RBTree
 }
 
@@ -123,7 +124,7 @@ func (r *RBNode) rightRotation() {
 	r.Parent = left
 }
 
-func (r *RBNode) find(item RBItem) (targetNode *RBNode, parentNode *RBNode) {
+func (r *RBNode) find(item  data_structure.OPItem) (targetNode *RBNode, parentNode *RBNode) {
 	if item.Equal(r.Item) {
 		return r, r.Parent
 	} else if item.LessThan(r.Item) {
