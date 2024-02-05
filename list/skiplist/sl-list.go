@@ -159,7 +159,7 @@ func (s *SkipList)Delete(item data_structure.OPItem) error {
 
 func (s *SkipList)randomLevel() int {
 	level := 0
-	for rand.Float32() < s.Skip && level < s.MaxLevel {
+	for rand.Float32() < s.Skip && level < s.MaxLevel-1 {
 		level++
 	}
 	return level

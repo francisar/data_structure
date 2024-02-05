@@ -31,7 +31,7 @@ func (t *RBTree) newNode(item data_structure.OPItem) *RBNode {
 	return &node
 }
 
-// Insert insert a Item into RBTree
+// Insert an Item into RBTree
 func (t *RBTree) Insert(item data_structure.OPItem) error {
 	t.mutex.Lock()
 	defer t.mutex.Unlock()
