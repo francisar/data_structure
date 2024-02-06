@@ -55,10 +55,10 @@ func (s *SkipList)Insert(item data_structure.OPItem)  {
 		currentLevel = last.Level
 	}
 	for l := currentLevel; l >=0; l-- {
+
 		for current:=last;current!=nil; {
 			if current.Item.Equal(item) {
 				current.Item.DeepCopy(item)
-
 				return
 			} else if current.Item.LessThan(item) {
 				last = current
@@ -93,16 +93,18 @@ func (s *SkipList)Insert(item data_structure.OPItem)  {
 		}
 	}
 	currentIndex := s.Header
-	for i:=level;i > 0; i-- {
-		if s.update[i] != nil {
-			currentIndex = s.update[i]
+	if currentIndex != node {
+		for i:=level;i > 0; i-- {
+			if s.update[i] != nil {
+				currentIndex = s.update[i]
+			}
+			node.Next[i] = currentIndex.Next[i]
+			currentIndex.Next[i] = node
+			if currentIndex.Level < i {
+				currentIndex.Level = i
+			}
+			s.update[i] = nil
 		}
-		node.Next[i] = currentIndex.Next[i]
-		currentIndex.Next[i] = node
-		if currentIndex.Level < i {
-			currentIndex.Level = i
-		}
-		s.update[i] = nil
 	}
 }
 

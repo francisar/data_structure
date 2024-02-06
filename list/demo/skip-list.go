@@ -4,9 +4,7 @@ import (
 	"fmt"
 	"github.com/francisar/data_structure"
 	"github.com/francisar/data_structure/list/skiplist"
-	"math/rand"
 	"strconv"
-	"time"
 )
 
 type Int struct {
@@ -54,25 +52,14 @@ func (i *Int) UnMarshal(str string) error {
 
 func main()  {
 	skipList := skiplist.NewSkipList(6,0.5)
-	totalNode := 30
-	for i := 0; i < totalNode; i++ {
-		value := rand.Intn(100)
-		skipList.Insert(NewInt(value))
+	/*
+	for i, data := range datas {
+		t := newTerm(data, uint64(i))
+		skipList.Insert(t)
 	}
-	rand.Seed(time.Now().Unix())
-
+	
+	 */
 	skipList.PrintSkipList()
-
-	for i := 0; i < totalNode * 3; i++ {
-		value := rand.Intn(100)
-		err := skipList.Delete(NewInt(value))
-		if err != nil {
-			continue
-		}
-		skipList.PrintSkipList()
-	}
-
-
 
 
 }
